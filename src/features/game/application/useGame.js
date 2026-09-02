@@ -35,7 +35,7 @@ export function useGame(randomNumberRepository) {
 
   useEffect(() => () => clearTimeout(resetTimer.current), []);
 
-  async function roll(slot, minimumRollingDuration = 0) {
+  async function roll(slot, minimumRollingDuration = 0, numberRange = { minimum: 1, maximum: 6 }) {
     const expectedStatus = slot === 'first'
       ? GAME_STATUS.INITIAL
       : GAME_STATUS.FIRST_REVEALED;
@@ -43,7 +43,7 @@ export function useGame(randomNumberRepository) {
 
     setRollingSlot(slot);
     const startedAt = Date.now();
-    const value = await randomNumberRepository.getRandomNumber();
+    const value = await randomNumberRepository.getRandomNumber(numberRange.minimum, numberRange.maximum);
     const remainingDuration = minimumRollingDuration - (Date.now() - startedAt);
     if (remainingDuration > 0) {
       await new Promise((resolve) => setTimeout(resolve, remainingDuration));

@@ -10,7 +10,7 @@ const randomNumberRepository = createRandomNumberRepository();
 const GAMES = [
   { id: 'dice', title: 'Dadu Ceria', description: 'Kocok dua dadu dan hitung hasilnya.', icon: Grid3X3, color: 'coral' },
   { id: 'cards', title: 'Kartu Pintar', description: 'Buka kartu angka satu per satu.', icon: Spade, color: 'blue' },
-  { id: 'farmer', title: 'Kebun Ayam', description: 'Belajar berhitung bersama anak ayam.', icon: Bird, color: 'green' },
+  { id: 'farmer', title: 'Ternak Ayam', description: 'Belajar berhitung bersama anak ayam.', icon: Bird, color: 'green' },
 ];
 
 function App() {

@@ -35,9 +35,14 @@ button:disabled { cursor: default; }
 .icon-button { width: 50px; height: 50px; display: grid; place-items: center; border: 2px solid var(--ink); border-radius: 50%; color: var(--ink); background: var(--paper); box-shadow: 3px 3px 0 var(--ink); }
 .header-actions { display: flex; gap: 10px; }
 .score { display: flex; align-items: center; gap: 8px; font-size: 15px; } .score svg { color: #e7a815; } .score strong { font-size: 23px; }
+.game-settings { display: flex; align-items: center; gap: 10px; }
 .operation-switch { display: flex; padding: 4px; border: 2px solid var(--ink); border-radius: 8px; background: white; }
 .operation-switch button { display: flex; align-items: center; gap: 6px; padding: 8px 13px; border: 0; border-radius: 4px; color: var(--ink); background: transparent; font-weight: 800; }
 .operation-switch button.active { color: white; background: var(--ink); } .operation-switch svg { width: 18px; }
+.level-select { position: relative; display: flex; align-items: center; height: 50px; box-sizing: border-box; padding: 4px 9px; border: 2px solid var(--ink); border-radius: 8px; color: var(--ink); background: #ffdc68; box-shadow: 3px 3px 0 var(--ink); font-size: 13px; font-weight: 800; }
+.level-select select { width: 122px; height: 100%; padding: 0 24px 0 2px; appearance: none; border: 0; color: inherit; background: transparent; font: inherit; font-size: 13px; font-weight: 800; cursor: pointer; }
+.level-select svg { position: absolute; right: 8px; width: 17px; pointer-events: none; }
+.level-select select:disabled { cursor: default; opacity: .6; }
 .game-stage { display: flex; min-height: 0; flex-direction: column; justify-content: center; align-items: center; gap: 26px; }
 .problem { display: flex; align-items: center; justify-content: center; gap: clamp(14px, 3vw, 42px); width: 100%; }
 .operator { font: 800 clamp(38px, 6vw, 72px) 'Baloo 2'; }
@@ -61,7 +66,7 @@ button:disabled { cursor: default; }
 .dragging-chick { position: fixed; z-index: 10; transform: translate(-50%, -50%); pointer-events: none; font-size: 52px; filter: drop-shadow(3px 4px 0 rgb(23 50 77 / 28%)); }
 .chick-coop { position: relative; min-height: 126px; padding: 32px 58px 12px 14px; border: 3px dashed var(--ink); border-radius: 8px; background: rgb(255 255 255 / 62%); }
 .chick-coop__label { position: absolute; top: 8px; left: 12px; font-size: 12px; font-weight: 900; }
-.chick-coop__chicks { display: grid; grid-template-columns: repeat(6, 30px); gap: 3px; align-content: center; min-height: 72px; font-size: 25px; }
+.chick-coop__chicks { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 3px; align-content: center; min-height: 72px; font-size: 25px; }
 .chick-coop output { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font: 800 36px 'Baloo 2'; color: var(--coral); }
 .farmer-answer__actions { display: flex; flex-direction: column; gap: 10px; }
 .farmer-answer__actions > button { width: 48px; }
@@ -75,10 +80,10 @@ button:disabled { cursor: default; }
 @media (max-width: 760px) {
   .home-content { width: min(100% - 28px, 560px); } .sun { width: 48px; height: 48px; right: 8%; } .welcome { padding: 2vh 0 3vh; } .welcome h1 { font-size: 48px; } .welcome__copy { font-size: 15px; margin-top: 16px; }
   .game-grid { grid-template-columns: 1fr; } .game-option { min-height: 108px; } .game-screen { padding: 14px; }
-  .game-header { grid-template-columns: 46px 1fr auto; gap: 10px; } .operation-switch { grid-row: 2; grid-column: 1 / -1; justify-self: center; } .icon-button { width: 44px; height: 44px; }.header-actions { gap: 6px; }
+  .game-header { grid-template-columns: 46px 1fr auto; gap: 10px; } .game-settings { grid-row: 2; grid-column: 1 / -1; justify-self: center; } .icon-button { width: 44px; height: 44px; }.header-actions { gap: 6px; }.level-select { height: 48px; padding: 4px 7px; }.level-select select { width: 112px; }
   .problem { gap: 10px; } .operator { font-size: 30px; } .dice, .number-card { width: 82px; } .dice { padding: 10px; box-shadow: 5px 5px 0 var(--ink); } .nest { width: 100px; min-height: 112px; padding: 8px; } .question-mark { width: 72px; font-size: 46px; }
   .answer-panel { flex-direction: column; gap: 12px; } .answer-display { width: 90px; min-height: 60px; font-size: 34px; } .number-pad { grid-template-columns: repeat(7, minmax(36px, 44px)); gap: 5px; } .number-pad button { height: 42px; } .result { padding: 28px 36px; }
-  .farmer-answer { grid-template-columns: 92px minmax(190px, 1fr); gap: 10px; } .chick-coop { min-height: 112px; } .chick-coop__chicks { grid-template-columns: repeat(6, 25px); font-size: 21px; } .farmer-answer__actions { grid-column: 1 / -1; flex-direction: row; justify-content: center; }
+  .farmer-answer { grid-template-columns: 92px minmax(190px, 1fr); gap: 10px; } .chick-coop { min-height: 112px; } .chick-coop__chicks { grid-template-columns: repeat(10, minmax(0, 1fr)); font-size: 21px; } .farmer-answer__actions { grid-column: 1 / -1; flex-direction: row; justify-content: center; }
 }
-@media (max-width: 430px) { .number-pad { grid-template-columns: repeat(5, 44px); } .problem { gap: 7px; } .dice, .number-card { width: 68px; border-width: 3px; } .nest { width: 82px; min-height: 100px; } .nest__chicks { font-size: 18px; } .question-mark { width: 56px; } .farmer-answer { grid-template-columns: 74px minmax(0, 1fr); width: 100%; } .farmer-answer .draggable-chick { width: 56px; height: 56px; font-size: 29px; } .chick-coop { min-height: 104px; padding-right: 42px; } .chick-coop__chicks { grid-template-columns: repeat(4, 23px); gap: 1px; font-size: 19px; } .chick-coop output { right: 9px; font-size: 30px; } }
+@media (max-width: 430px) { .number-pad { grid-template-columns: repeat(5, 44px); } .problem { gap: 7px; } .dice, .number-card { width: 68px; border-width: 3px; } .nest { width: 82px; min-height: 100px; } .nest__chicks { font-size: 18px; } .question-mark { width: 56px; } .farmer-answer { grid-template-columns: 74px minmax(0, 1fr); width: 100%; } .farmer-answer .draggable-chick { width: 56px; height: 56px; font-size: 29px; } .chick-coop { min-height: 104px; padding-right: 42px; } .chick-coop__chicks { grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 1px; font-size: 19px; } .chick-coop output { right: 9px; font-size: 30px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }

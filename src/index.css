@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@500;600;700;800&display=swap');
+
+:root {
+  font-family: 'Nunito', sans-serif;
+  color: #17324d;
+  background: #f8f5ec;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; min-height: 100vh; }
+button { font: inherit; }
+button:focus-visible { outline: 4px solid #17324d; outline-offset: 3px; }
+#root { min-height: 100vh; }

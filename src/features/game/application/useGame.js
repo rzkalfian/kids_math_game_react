@@ -35,14 +35,19 @@ export function useGame(randomNumberRepository) {
 
   useEffect(() => () => clearTimeout(resetTimer.current), []);
 
-  async function roll(slot) {
+  async function roll(slot, minimumRollingDuration = 0) {
     const expectedStatus = slot === 'first'
       ? GAME_STATUS.INITIAL
       : GAME_STATUS.FIRST_REVEALED;
     if (rollingSlot || state.status !== expectedStatus) return;
 
     setRollingSlot(slot);
+    const startedAt = Date.now();
     const value = await randomNumberRepository.getRandomNumber();
+    const remainingDuration = minimumRollingDuration - (Date.now() - startedAt);
+    if (remainingDuration > 0) {
+      await new Promise((resolve) => setTimeout(resolve, remainingDuration));
+    }
     dispatch({ type: `reveal-${slot}`, value });
     setRollingSlot(null);
   }

@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { ArrowRight, Bird, Grid3X3, Spade } from 'lucide-react';
+import { ArrowRight, Bird, Grid3X3, Spade, Volume2, VolumeX } from 'lucide-react';
 import { createRandomNumberRepository } from './features/game/data/randomNumberRepository.js';
 import { GameBoard } from './features/game/presentation/components/GameBoard.jsx';
+import { useGameAudio } from './features/game/presentation/useGameAudio.js';
 import './App.css';
 
 const randomNumberRepository = createRandomNumberRepository();
@@ -14,13 +15,30 @@ const GAMES = [
 
 function App() {
   const [mode, setMode] = useState(null);
+  const gameAudio = useGameAudio();
+
+  function selectMode(nextMode) {
+    gameAudio.startBackgroundMusic(nextMode);
+    setMode(nextMode);
+  }
+
+  function returnHome() {
+    gameAudio.startBackgroundMusic('menu');
+    setMode(null);
+  }
+
+  function toggleMenuAudio() {
+    if (gameAudio.isMuted || gameAudio.isMusicPlaying) gameAudio.toggleAudio();
+    else gameAudio.startBackgroundMusic('menu');
+  }
 
   if (mode) {
     return (
       <GameBoard
         mode={mode}
         randomNumberRepository={randomNumberRepository}
-        onBack={() => setMode(null)}
+        onBack={returnHome}
+        audio={gameAudio}
       />
     );
   }
@@ -32,6 +50,9 @@ function App() {
         <header className="brand">
           <span className="brand__mark" aria-hidden="true">1+2</span>
           <span>Math Lab</span>
+          <button className="home-audio-button" type="button" onClick={toggleMenuAudio} title={gameAudio.isMuted ? 'Nyalakan musik' : 'Matikan musik'} aria-label={gameAudio.isMuted ? 'Nyalakan musik' : 'Matikan musik'}>
+            {gameAudio.isMuted ? <VolumeX /> : <Volume2 />}
+          </button>
         </header>
 
         <section className="welcome">
@@ -44,7 +65,7 @@ function App() {
           <h2 id="game-picker-title">Mau bermain apa?</h2>
           <div className="game-grid">
             {GAMES.map(({ id, title, description, icon: Icon, color }, index) => (
-              <button className={`game-option game-option--${color}`} type="button" key={id} onClick={() => setMode(id)}>
+              <button className={`game-option game-option--${color}`} type="button" key={id} onClick={() => selectMode(id)}>
                 <span className="game-option__number">0{index + 1}</span>
                 <span className="game-option__icon"><Icon aria-hidden="true" /></span>
                 <span className="game-option__text"><strong>{title}</strong><small>{description}</small></span>

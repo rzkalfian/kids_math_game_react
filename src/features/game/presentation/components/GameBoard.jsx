@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react';
-import { ArrowLeft, Check, Minus, Plus, RefreshCw, Star, Trash2, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowLeft, Check, Minus, Plus, RefreshCw, Star, Trash2, Volume2, VolumeX, X } from 'lucide-react';
 import { calculateAnswer, GAME_STATUS, OPERATIONS } from '../../domain/game.js';
 import { useGame } from '../../application/useGame.js';
 import { Dice } from './Dice.jsx';
@@ -26,7 +26,7 @@ function PlayingPiece({ mode, value, slot, rolling, onClick, disabled }) {
   );
 }
 
-function FarmerDragAnswer({ value, onChange, onSubmit }) {
+function FarmerDragAnswer({ value, onChange, onSubmit, onAddChick }) {
   const chickCount = Math.abs(value);
   const canAdd = chickCount < 12;
   const coopRef = useRef(null);
@@ -45,7 +45,10 @@ function FarmerDragAnswer({ value, onChange, onSubmit }) {
       && event.clientY <= coopBounds.bottom;
 
     setDragPosition(null);
-    if (isOverCoop && canAdd) changeChickCount(chickCount + 1);
+    if (isOverCoop && canAdd) {
+      onAddChick();
+      changeChickCount(chickCount + 1);
+    }
   }
 
   return (
@@ -64,7 +67,10 @@ function FarmerDragAnswer({ value, onChange, onSubmit }) {
           onPointerUp={finishDrag}
           onPointerCancel={() => setDragPosition(null)}
           onKeyDown={(event) => {
-            if (canAdd && (event.key === 'Enter' || event.key === ' ')) changeChickCount(chickCount + 1);
+            if (canAdd && (event.key === 'Enter' || event.key === ' ')) {
+              onAddChick();
+              changeChickCount(chickCount + 1);
+            }
           }}
           aria-label="Seret anak ayam ke kandang"
         >
@@ -104,7 +110,7 @@ function FarmerDragAnswer({ value, onChange, onSubmit }) {
   );
 }
 
-export function GameBoard({ mode, randomNumberRepository, onBack }) {
+export function GameBoard({ mode, randomNumberRepository, onBack, audio }) {
   const { state, rollingSlot, roll, submitAnswer, changeOperation, restart } = useGame(randomNumberRepository);
   const [input, setInput] = useState('');
   const [farmerAnswer, setFarmerAnswer] = useState(0);
@@ -112,10 +118,32 @@ export function GameBoard({ mode, randomNumberRepository, onBack }) {
   const isAnswered = state.status === GAME_STATUS.ANSWERED;
   const isCorrect = state.userAnswer === answer;
 
+  useEffect(() => {
+    if (mode === 'farmer' && state.status === GAME_STATUS.READY) {
+      audio.startChickLoop();
+    }
+
+    return audio.stopChickLoop;
+  }, [audio, mode, state.status]);
+
   function submit(value) {
+    if (mode === 'farmer') audio.stopChickLoop();
+    if (value === answer) audio.playCorrectSound();
+    else audio.playTryAgainSound();
     submitAnswer(value);
     setInput('');
     setFarmerAnswer(0);
+  }
+
+  function handleRoll(slot) {
+    const canRollFirst = slot === 'first' && state.status === GAME_STATUS.INITIAL;
+    const canRollSecond = slot === 'second' && state.status === GAME_STATUS.FIRST_REVEALED;
+    if (rollingSlot || (!canRollFirst && !canRollSecond)) return;
+
+    if (mode === 'dice') audio.playDiceRollSound();
+    if (mode === 'cards') audio.playCardFlipSound();
+    if (mode === 'farmer') audio.playChickenSound();
+    roll(slot, mode === 'dice' ? audio.diceShakeDurationMs : 0);
   }
 
   return (
@@ -127,7 +155,12 @@ export function GameBoard({ mode, randomNumberRepository, onBack }) {
           <button className={state.operation === OPERATIONS.ADD ? 'active' : ''} type="button" onClick={() => changeOperation(OPERATIONS.ADD)}><Plus /> Tambah</button>
           <button className={state.operation === OPERATIONS.SUBTRACT ? 'active' : ''} type="button" onClick={() => changeOperation(OPERATIONS.SUBTRACT)}><Minus /> Kurang</button>
         </div>
-        <button className="icon-button" type="button" onClick={restart} title="Mulai ulang"><RefreshCw /></button>
+        <div className="header-actions">
+          <button className="icon-button" type="button" onClick={audio.toggleAudio} title={audio.isMuted ? 'Nyalakan suara' : 'Matikan suara'} aria-label={audio.isMuted ? 'Nyalakan suara' : 'Matikan suara'}>
+            {audio.isMuted ? <VolumeX /> : <Volume2 />}
+          </button>
+          <button className="icon-button" type="button" onClick={restart} title="Mulai ulang" aria-label="Mulai ulang"><RefreshCw /></button>
+        </div>
       </header>
 
       <section className="game-stage">
@@ -140,15 +173,15 @@ export function GameBoard({ mode, randomNumberRepository, onBack }) {
         ) : (
           <>
             <div className="problem" aria-label="Soal matematika">
-              <PlayingPiece mode={mode} slot="pertama" value={state.firstNumber} rolling={rollingSlot === 'first'} onClick={() => roll('first')} disabled={state.status !== GAME_STATUS.INITIAL || Boolean(rollingSlot)} />
+              <PlayingPiece mode={mode} slot="pertama" value={state.firstNumber} rolling={rollingSlot === 'first'} onClick={() => handleRoll('first')} disabled={state.status !== GAME_STATUS.INITIAL || Boolean(rollingSlot)} />
               <span className="operator">{state.operation}</span>
-              <PlayingPiece mode={mode} slot="kedua" value={state.secondNumber} rolling={rollingSlot === 'second'} onClick={() => roll('second')} disabled={state.status !== GAME_STATUS.FIRST_REVEALED || Boolean(rollingSlot)} />
+              <PlayingPiece mode={mode} slot="kedua" value={state.secondNumber} rolling={rollingSlot === 'second'} onClick={() => handleRoll('second')} disabled={state.status !== GAME_STATUS.FIRST_REVEALED || Boolean(rollingSlot)} />
               <span className="operator">=</span>
               <span className="question-mark">?</span>
             </div>
             {state.status === GAME_STATUS.READY && (
               mode === 'farmer'
-                ? <FarmerDragAnswer value={farmerAnswer} onChange={setFarmerAnswer} onSubmit={() => submit(farmerAnswer)} />
+                ? <FarmerDragAnswer value={farmerAnswer} onChange={setFarmerAnswer} onSubmit={() => submit(farmerAnswer)} onAddChick={audio.playChickenSound} />
                 : <NumberPad value={input} onChange={setInput} onSubmit={() => submit(Number(input))} />
             )}
           </>

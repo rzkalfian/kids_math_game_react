@@ -1,10 +1,10 @@
-export const OPERATIONS = Object.freeze({ ADD: '+', SUBTRACT: '-' });
+export const OPERATIONS = Object.freeze({ ADD: "+", SUBTRACT: "-" });
 
 export const GAME_STATUS = Object.freeze({
-  INITIAL: 'initial',
-  FIRST_REVEALED: 'first_revealed',
-  READY: 'ready',
-  ANSWERED: 'answered',
+  INITIAL: "initial",
+  FIRST_REVEALED: "first_revealed",
+  READY: "ready",
+  ANSWERED: "answered",
 });
 
 export function createInitialGameState(operation = OPERATIONS.ADD) {
@@ -38,11 +38,9 @@ export function revealSecond(state, value) {
 
 export function answerQuestion(state, userAnswer) {
   if (state.status !== GAME_STATUS.READY) return state;
-  const isCorrect = userAnswer === calculateAnswer(
-    state.firstNumber,
-    state.secondNumber,
-    state.operation,
-  );
+  const isCorrect =
+    userAnswer ===
+    calculateAnswer(state.firstNumber, state.secondNumber, state.operation);
 
   return {
     ...state,

@@ -10,7 +10,7 @@ const DOTS = {
 export function Dice({ value, rolling, onClick, disabled, label }) {
   return (
     <button
-      className={`dice ${rolling ? 'dice--rolling' : ''}`}
+      className={`dice ${rolling ? "dice--rolling" : ""}`}
       type="button"
       onClick={onClick}
       disabled={disabled}
@@ -19,11 +19,16 @@ export function Dice({ value, rolling, onClick, disabled, label }) {
       {value > 0 ? (
         <span className="dice__grid" aria-hidden="true">
           {Array.from({ length: 9 }, (_, index) => (
-            <span key={index} className={DOTS[value].includes(index) ? 'dot' : ''} />
+            <span
+              key={index}
+              className={DOTS[value].includes(index) ? "dot" : ""}
+            />
           ))}
         </span>
       ) : (
-        <span className="dice__hint" aria-hidden="true">?</span>
+        <span className="dice__hint" aria-hidden="true">
+          ?
+        </span>
       )}
     </button>
   );

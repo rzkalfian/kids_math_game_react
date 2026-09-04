@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from "react";
 import {
   GAME_STATUS,
   answerQuestion,
@@ -7,21 +7,21 @@ import {
   nextQuestion,
   revealFirst,
   revealSecond,
-} from '../domain/game.js';
+} from "../domain/game.js";
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'reveal-first':
+    case "reveal-first":
       return revealFirst(state, action.value);
-    case 'reveal-second':
+    case "reveal-second":
       return revealSecond(state, action.value);
-    case 'answer':
+    case "answer":
       return answerQuestion(state, action.value);
-    case 'next':
+    case "next":
       return nextQuestion(state);
-    case 'operation':
+    case "operation":
       return changeOperation(state, action.value);
-    case 'restart':
+    case "restart":
       return createInitialGameState(state.operation);
     default:
       return state;
@@ -29,21 +29,31 @@ function reducer(state, action) {
 }
 
 export function useGame(randomNumberRepository) {
-  const [state, dispatch] = useReducer(reducer, undefined, createInitialGameState);
+  const [state, dispatch] = useReducer(
+    reducer,
+    undefined,
+    createInitialGameState,
+  );
   const [rollingSlot, setRollingSlot] = useState(null);
   const resetTimer = useRef(null);
 
   useEffect(() => () => clearTimeout(resetTimer.current), []);
 
-  async function roll(slot, minimumRollingDuration = 0, numberRange = { minimum: 1, maximum: 6 }) {
-    const expectedStatus = slot === 'first'
-      ? GAME_STATUS.INITIAL
-      : GAME_STATUS.FIRST_REVEALED;
+  async function roll(
+    slot,
+    minimumRollingDuration = 0,
+    numberRange = { minimum: 1, maximum: 6 },
+  ) {
+    const expectedStatus =
+      slot === "first" ? GAME_STATUS.INITIAL : GAME_STATUS.FIRST_REVEALED;
     if (rollingSlot || state.status !== expectedStatus) return;
 
     setRollingSlot(slot);
     const startedAt = Date.now();
-    const value = await randomNumberRepository.getRandomNumber(numberRange.minimum, numberRange.maximum);
+    const value = await randomNumberRepository.getRandomNumber(
+      numberRange.minimum,
+      numberRange.maximum,
+    );
     const remainingDuration = minimumRollingDuration - (Date.now() - startedAt);
     if (remainingDuration > 0) {
       await new Promise((resolve) => setTimeout(resolve, remainingDuration));
@@ -54,8 +64,8 @@ export function useGame(randomNumberRepository) {
 
   function submitAnswer(value) {
     if (!Number.isInteger(value) || state.status !== GAME_STATUS.READY) return;
-    dispatch({ type: 'answer', value });
-    resetTimer.current = setTimeout(() => dispatch({ type: 'next' }), 1600);
+    dispatch({ type: "answer", value });
+    resetTimer.current = setTimeout(() => dispatch({ type: "next" }), 1600);
   }
 
   return {
@@ -63,7 +73,7 @@ export function useGame(randomNumberRepository) {
     rollingSlot,
     roll,
     submitAnswer,
-    changeOperation: (value) => dispatch({ type: 'operation', value }),
-    restart: () => dispatch({ type: 'restart' }),
+    changeOperation: (value) => dispatch({ type: "operation", value }),
+    restart: () => dispatch({ type: "restart" }),
   };
 }

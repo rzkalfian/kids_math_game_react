@@ -2,13 +2,17 @@ import { useState } from "react";
 import {
   ArrowRight,
   Bird,
+  Download,
   Fish,
   Grid3X3,
+  Heart,
+  QrCode,
   Rocket,
   Spade,
   Target,
   Volume2,
   VolumeX,
+  X,
 } from "lucide-react";
 import { createRandomNumberRepository } from "./features/game/data/randomNumberRepository.js";
 import { GameBoard } from "./features/game/presentation/components/GameBoard.jsx";
@@ -64,6 +68,7 @@ const GAMES = [
 
 function App() {
   const [mode, setMode] = useState(null);
+  const [showSupportModal, setShowSupportModal] = useState(false);
   const gameAudio = useGameAudio();
 
   function selectMode(nextMode) {
@@ -101,15 +106,27 @@ function App() {
             1+2
           </span>
           <span>Math Lab</span>
-          <button
-            className="home-audio-button"
-            type="button"
-            onClick={toggleMenuAudio}
-            title={gameAudio.isMuted ? "Nyalakan musik" : "Matikan musik"}
-            aria-label={gameAudio.isMuted ? "Nyalakan musik" : "Matikan musik"}
-          >
-            {gameAudio.isMuted ? <VolumeX /> : <Volume2 />}
-          </button>
+          <div className="header-nav-actions">
+            <button
+              className="support-dev-btn"
+              type="button"
+              onClick={() => setShowSupportModal(true)}
+              title="Dukung Pengembang"
+              aria-label="Dukung Pengembang"
+            >
+              <Heart className="support-dev-heart" aria-hidden="true" />
+              <span>Dukung Developer</span>
+            </button>
+            <button
+              className="home-audio-button"
+              type="button"
+              onClick={toggleMenuAudio}
+              title={gameAudio.isMuted ? "Nyalakan musik" : "Matikan musik"}
+              aria-label={gameAudio.isMuted ? "Nyalakan musik" : "Matikan musik"}
+            >
+              {gameAudio.isMuted ? <VolumeX /> : <Volume2 />}
+            </button>
+          </div>
         </header>
 
         <section className="welcome">
@@ -154,7 +171,15 @@ function App() {
         </section>
 
         <footer className="home-footer">
-          <span>Untuk penjelajah angka usia 5+</span>
+          <span>Untuk penjelajah angka usia 3 - 6 tahun</span>
+          <button
+            className="footer-support-link"
+            type="button"
+            onClick={() => setShowSupportModal(true)}
+          >
+            <QrCode size={16} aria-hidden="true" />
+            <span>Support Developer (QRIS)</span>
+          </button>
           <div className="progress-dots" aria-hidden="true">
             <i />
             <i />
@@ -162,6 +187,66 @@ function App() {
           </div>
         </footer>
       </div>
+
+      {/* Modal QRIS Support */}
+      {showSupportModal && (
+        <div
+          className="modal-backdrop"
+          onClick={() => setShowSupportModal(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="support-modal-title"
+        >
+          <div
+            className="modal-content support-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="modal-close-btn"
+              type="button"
+              onClick={() => setShowSupportModal(false)}
+              aria-label="Tutup modal"
+            >
+              <X />
+            </button>
+            <div className="support-modal__header">
+              <span className="support-modal__badge">☕ Dukung Pengembang</span>
+              <h2 id="support-modal-title">Dukung Math Lab</h2>
+              <p>
+                Scan QRIS di bawah ini untuk mendukung kami membuat lebih banyak game edukasi seru untuk anak-anak!
+              </p>
+            </div>
+            <div className="support-qris-container">
+              <img
+                src="/qris-support.jpeg"
+                alt="QRIS Support Pengembang"
+                className="support-qris-image"
+              />
+            </div>
+            <div className="support-modal__actions">
+              <a
+                href="/qris-support.jpeg"
+                download="QRIS-Support-MathLab.jpeg"
+                className="support-download-btn"
+                title="Download Gambar QRIS"
+              >
+                <Download size={16} aria-hidden="true" />
+                <span>Download QRIS</span>
+              </a>
+            </div>
+            <div className="support-modal__footer">
+              <p>Terima kasih banyak atas dukungan & kebaikan Anda! ❤️</p>
+              <button
+                className="primary-button"
+                type="button"
+                onClick={() => setShowSupportModal(false)}
+              >
+                Tutup
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

@@ -2,6 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import chickSound from "../../../assets/sounds/chick.mp3";
 import diceShakeSound from "../../../assets/sounds/diceshake.mp3";
 import failureSound from "../../../assets/sounds/failure.mp3";
+import fishStartSound from "../../../assets/sounds/fish-start.mp3";
+import getFishSound from "../../../assets/sounds/get-fish.mp3";
+import shootGunSound from "../../../assets/sounds/shoot-gun.mp3";
+import soundtrackFishSound from "../../../assets/sounds/soundtrack-fish.mp3";
+import soundtrackPlanetSound from "../../../assets/sounds/soundtrack-planet.mp3";
 import yaySound from "../../../assets/sounds/yay.mp3";
 
 const AUDIO_PREFERENCE_KEY = "kids-math-game-audio-muted";
@@ -39,6 +44,30 @@ const BACKGROUND_MUSIC = {
     [493.88, 1.02, 0.16],
     [440, 1.3, 0.16],
     [523.25, 1.62, 0.3],
+  ],
+  fishing: [
+    [440, 0, 0.18],
+    [554.37, 0.28, 0.16],
+    [659.25, 0.58, 0.24],
+    [880, 0.98, 0.2],
+    [659.25, 1.34, 0.16],
+    [554.37, 1.64, 0.26],
+  ],
+  shooting: [
+    [523.25, 0, 0.16],
+    [659.25, 0.24, 0.16],
+    [783.99, 0.48, 0.2],
+    [1046.5, 0.8, 0.24],
+    [783.99, 1.18, 0.16],
+    [880, 1.48, 0.26],
+  ],
+  space: [
+    [196, 0, 0.28],      // G3 deep space drone
+    [293.66, 0.3, 0.22], // D4
+    [392, 0.6, 0.28],    // G4 cosmic pulse
+    [587.33, 1.0, 0.24], // D5 planet glow
+    [493.88, 1.35, 0.2], // B4 orbit
+    [392, 1.65, 0.32],   // G4 return
   ],
 };
 
@@ -128,11 +157,46 @@ export function useGameAudio() {
     if (mutedRef.current) return;
     if (isMusicPlayingRef.current && musicThemeRef.current === theme) return;
 
-    const context = getAudioContext();
     stopBackgroundMusic();
     musicThemeRef.current = theme;
     isMusicPlayingRef.current = true;
     setIsMusicPlaying(true);
+
+    if (theme === "fishing") {
+      if (!soundEffectsRef.current.soundtrackFish) {
+        const sound = new Audio(soundtrackFishSound);
+        sound.loop = true;
+        sound.preload = "auto";
+        sound.volume = 0.32;
+        soundEffectsRef.current.soundtrackFish = sound;
+      }
+      const sound = soundEffectsRef.current.soundtrackFish;
+      sound.currentTime = 0;
+      sound.play().catch(() => {
+        isMusicPlayingRef.current = false;
+        setIsMusicPlaying(false);
+      });
+      return;
+    }
+
+    if (theme === "space") {
+      if (!soundEffectsRef.current.soundtrackPlanet) {
+        const sound = new Audio(soundtrackPlanetSound);
+        sound.loop = true;
+        sound.preload = "auto";
+        sound.volume = 0.32;
+        soundEffectsRef.current.soundtrackPlanet = sound;
+      }
+      const sound = soundEffectsRef.current.soundtrackPlanet;
+      sound.currentTime = 0;
+      sound.play().catch(() => {
+        isMusicPlayingRef.current = false;
+        setIsMusicPlaying(false);
+      });
+      return;
+    }
+
+    const context = getAudioContext();
     context
       .resume()
       .then(playBackgroundLoop)
@@ -146,6 +210,12 @@ export function useGameAudio() {
     isMusicPlayingRef.current = false;
     setIsMusicPlaying(false);
     clearTimeout(musicTimerRef.current);
+    if (soundEffectsRef.current.soundtrackFish) {
+      soundEffectsRef.current.soundtrackFish.pause();
+    }
+    if (soundEffectsRef.current.soundtrackPlanet) {
+      soundEffectsRef.current.soundtrackPlanet.pause();
+    }
   }
 
   function playFeedback(notes) {
@@ -171,8 +241,11 @@ export function useGameAudio() {
       .catch(() => {});
   }
 
-  function playSoundEffect(name, source, volume = 0.5) {
-    if (mutedRef.current) return;
+  function playSoundEffect(name, source, volume = 0.5, onEnded) {
+    if (mutedRef.current) {
+      if (onEnded) onEnded();
+      return;
+    }
 
     if (!soundEffectsRef.current[name]) {
       const sound = new Audio(source);
@@ -183,7 +256,17 @@ export function useGameAudio() {
 
     const sound = soundEffectsRef.current[name];
     sound.currentTime = 0;
-    sound.play().catch(() => {});
+    if (onEnded) {
+      sound.onended = () => {
+        sound.onended = null;
+        onEnded();
+      };
+    } else {
+      sound.onended = null;
+    }
+    sound.play().catch(() => {
+      if (onEnded) onEnded();
+    });
   }
 
   function startChickLoop() {
@@ -235,6 +318,99 @@ export function useGameAudio() {
     ]);
   }
 
+  function playWaterSplashSound() {
+    playFeedback([
+      [320, 0, 0.06, 0.08],
+      [580, 0.04, 0.09, 0.09],
+      [880, 0.1, 0.14, 0.07],
+      [1200, 0.18, 0.12, 0.05],
+    ]);
+  }
+
+  function playFishStartSound() {
+    playSoundEffect("fish-start", fishStartSound, 0.45);
+  }
+
+  function playGetFishSound() {
+    playSoundEffect("get-fish", getFishSound, 0.45);
+  }
+
+  function playShootSound(onEnded, durationMs = 2000) {
+    if (mutedRef.current) {
+      if (onEnded) setTimeout(onEnded, durationMs);
+      return;
+    }
+
+    if (!soundEffectsRef.current["shoot-gun"]) {
+      const sound = new Audio(shootGunSound);
+      sound.preload = "auto";
+      sound.volume = 0.45;
+      soundEffectsRef.current["shoot-gun"] = sound;
+    }
+
+    const sound = soundEffectsRef.current["shoot-gun"];
+    sound.currentTime = 0;
+    sound.play().catch(() => {});
+
+    // Delay 2 detik sebelum callback onEnded dipanggil (dapat burung)
+    if (onEnded) {
+      setTimeout(() => {
+        onEnded();
+      }, durationMs);
+    }
+
+    // Hentikan suara tembakan setelah ~2.8 - 3 detik
+    setTimeout(() => {
+      if (!sound.paused) {
+        sound.pause();
+        sound.currentTime = 0;
+      }
+    }, 2800);
+  }
+
+  function stopShootSound() {
+    const sound = soundEffectsRef.current["shoot-gun"];
+    if (sound && !sound.paused) {
+      sound.pause();
+      sound.currentTime = 0;
+    }
+  }
+
+  function playHitBirdSound() {
+    playFeedback([
+      [1200, 0, 0.08, 0.09],
+      [1600, 0.06, 0.1, 0.1],
+      [2000, 0.14, 0.16, 0.08],
+    ]);
+  }
+
+  function playBirdRustleSound() {
+    playFeedback([
+      [1046.5, 0, 0.08, 0.07],
+      [1318.5, 0.07, 0.1, 0.08],
+      [1567.98, 0.16, 0.12, 0.06],
+    ]);
+  }
+
+  function playSpaceSound() {
+    playFeedback([
+      [220, 0, 0.12, 0.08],
+      [440, 0.06, 0.14, 0.09],
+      [880, 0.15, 0.18, 0.08],
+      [1760, 0.28, 0.28, 0.06],
+    ]);
+  }
+
+  function playAstronautBoardSound() {
+    // Futuristic sci-fi airlock & thruster chime
+    playFeedback([
+      [523.25, 0, 0.06, 0.08],
+      [659.25, 0.05, 0.08, 0.09],
+      [1046.5, 0.1, 0.14, 0.1],
+      [1318.5, 0.18, 0.22, 0.07],
+    ]);
+  }
+
   function toggleAudio() {
     const nextMuted = !mutedRef.current;
     mutedRef.current = nextMuted;
@@ -263,5 +439,14 @@ export function useGameAudio() {
     stopChickLoop,
     playCardFlipSound,
     playChickenSound,
+    playWaterSplashSound,
+    playFishStartSound,
+    playGetFishSound,
+    playShootSound,
+    stopShootSound,
+    playHitBirdSound,
+    playBirdRustleSound,
+    playSpaceSound,
+    playAstronautBoardSound,
   };
 }

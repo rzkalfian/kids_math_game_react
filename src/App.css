@@ -158,6 +158,15 @@ button:disabled {
 .game-option--green {
   background: #acd9aa;
 }
+.game-option--cyan {
+  background: #7de2d1;
+}
+.game-option--yellow {
+  background: #ffe375;
+}
+.game-option--purple {
+  background: #c3b1e1;
+}
 .game-option__number {
   grid-column: 1 / -1;
   font-size: 12px;
@@ -227,6 +236,42 @@ button:disabled {
 }
 .game-screen--farmer {
   background-color: #f7f2d8;
+}
+.game-screen--fishing {
+  background-color: #dff6fb;
+}
+.game-screen--shooting {
+  background-color: #fef8e7;
+}
+.game-screen--space {
+  background-color: #0b1021;
+  background-image:
+    radial-gradient(1.5px 1.5px at 15% 20%, #ffffff 100%, transparent),
+    radial-gradient(1.5px 1.5px at 35% 45%, #ffd54f 100%, transparent),
+    radial-gradient(2px 2px at 60% 15%, #ffffff 100%, transparent),
+    radial-gradient(1.5px 1.5px at 80% 30%, #a78bfa 100%, transparent),
+    radial-gradient(2px 2px at 25% 75%, #ffffff 100%, transparent),
+    radial-gradient(1px 1px at 70% 65%, #6ee7b7 100%, transparent),
+    radial-gradient(1.5px 1.5px at 90% 85%, #ffffff 100%, transparent),
+    radial-gradient(circle at 12% 88%, rgba(203, 213, 225, 0.22) 0%, rgba(148, 163, 184, 0.08) 50%, transparent 75%), /* Kawah Permukaan Bulan */
+    radial-gradient(circle at 85% 15%, rgba(139, 92, 246, 0.18) 0%, rgba(59, 130, 246, 0.1) 45%, transparent 70%), /* Nebula Tata Surya */
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+  color: #f1f5f9;
+}
+.game-screen--space .icon-button,
+.game-screen--space .operation-switch,
+.game-screen--space .level-select {
+  border-color: #3b4252;
+  box-shadow: 3px 3px 0 #000;
+}
+.game-screen--space .score strong {
+  color: #ffd54f;
+}
+.game-screen--space .operator,
+.game-screen--space .instruction {
+  color: #e2e8f0;
 }
 .game-header {
   width: min(1100px, 100%);
@@ -436,6 +481,86 @@ button:disabled {
 .nest small {
   font-weight: 900;
 }
+.aquarium-piece {
+  width: clamp(130px, 20vw, 220px);
+  min-height: 150px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  border: 4px solid var(--ink);
+  border-radius: 16px;
+  color: var(--ink);
+  background: #7de2d1;
+  box-shadow: 8px 8px 0 var(--ink);
+}
+.aquarium-piece__fishes {
+  min-height: 54px;
+  font-size: clamp(22px, 3vw, 34px);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.aquarium-piece small {
+  font-weight: 900;
+}
+.aquarium-piece--swimming {
+  animation: shake 0.12s linear infinite alternate;
+}
+.tree-piece {
+  width: clamp(130px, 20vw, 220px);
+  min-height: 150px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  border: 4px solid var(--ink);
+  border-radius: 24px 24px 12px 12px;
+  color: var(--ink);
+  background: #a4dd82;
+  box-shadow: 8px 8px 0 var(--ink);
+}
+.tree-piece__birds {
+  min-height: 54px;
+  font-size: clamp(22px, 3vw, 34px);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.tree-piece small {
+  font-weight: 900;
+}
+.tree-piece--rustling {
+  animation: shake 0.12s linear infinite alternate;
+}
+.planet-piece {
+  width: clamp(130px, 20vw, 220px);
+  min-height: 150px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  border: 4px solid var(--ink);
+  border-radius: 50% 50% 30% 30%;
+  color: var(--ink);
+  background: radial-gradient(circle at 35% 35%, #d1c4e9, #9575cd, #512da8);
+  box-shadow: 8px 8px 0 var(--ink);
+  color: white;
+}
+.planet-piece__astronauts {
+  min-height: 54px;
+  font-size: clamp(22px, 3vw, 34px);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.planet-piece small {
+  font-weight: 900;
+  color: #ffe082;
+}
+.planet-piece--orbiting {
+  animation: shake 0.12s linear infinite alternate;
+}
 .answer-panel {
   display: flex;
   align-items: center;
@@ -455,11 +580,14 @@ button:disabled {
 }
 .number-pad {
   display: grid;
-  grid-template-columns: repeat(7, 48px);
+  grid-template-columns: repeat(6, 48px);
   gap: 7px;
 }
 .number-pad button,
-.farmer-answer button {
+.farmer-answer button,
+.fishing-answer button,
+.shooting-answer button,
+.space-answer button {
   height: 48px;
   display: grid;
   place-items: center;
@@ -475,9 +603,6 @@ button:disabled {
 }
 .key--submit {
   background: #8bd4a5 !important;
-}
-.key--sign {
-  background: #ffdc68 !important;
 }
 .number-pad svg {
   width: 20px;
@@ -558,10 +683,14 @@ button:disabled {
   flex-direction: column;
   gap: 10px;
 }
-.farmer-answer__actions > button {
+.farmer-answer__actions > button,
+.fishing-answer__actions > button,
+.shooting-answer__actions > button {
   width: 48px;
 }
-.farmer-answer__actions .primary-button {
+.farmer-answer__actions .primary-button,
+.fishing-answer__actions .primary-button,
+.shooting-answer__actions .primary-button {
   width: auto;
   display: flex;
   grid-auto-flow: column;
@@ -569,14 +698,1010 @@ button:disabled {
   padding: 0 18px;
   background: #8bd4a5;
 }
+
+/* Fishing Game Styles */
+.fishing-answer {
+  display: grid;
+  grid-template-columns: 120px 140px minmax(240px, 380px) auto;
+  align-items: center;
+  gap: 14px;
+}
+.fishing-section-label {
+  font-size: 13px;
+  font-weight: 800;
+  display: block;
+  text-align: center;
+  margin-bottom: 4px;
+}
+.fishing-dock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.fishing-rod-control {
+  width: 120px;
+  height: 126px !important;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: none !important;
+  border-radius: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  cursor: grab;
+  touch-action: none;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  padding: 0;
+  user-select: none;
+}
+.fishing-rod-control:not(:disabled):hover {
+  transform: translateY(-4px) scale(1.05);
+}
+.fishing-rod-control:not(:disabled):active,
+.fishing-rod-control--dragging {
+  cursor: grabbing;
+  transform: scale(0.95);
+}
+.rod-preview {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rod-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(3px 4px 0 rgb(23 50 77 / 28%));
+}
+.hook-marker {
+  position: absolute;
+  left: 95%;
+  top: 76%;
+  transform: translate(-50%, -35%);
+  font-size: 22px;
+  animation: hookBob 1.2s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes hookBob {
+  from {
+    transform: translate(-50%, -35%) translateY(0);
+  }
+  to {
+    transform: translate(-50%, -35%) translateY(-4px);
+  }
+}
+.rod-hint {
+  font-size: 11px;
+  font-weight: 900;
+  color: #0c5768;
+  margin-top: 4px;
+}
+
+/* Kolam Ikan Sumber */
+.fishing-source-pond {
+  height: 126px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 6px;
+  border: 3px solid #148aa5;
+  border-radius: 12px;
+  background: radial-gradient(circle at center, #b8eef7, #7de2d1);
+  box-shadow: 3px 3px 0 var(--ink);
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  text-align: center;
+}
+.fishing-source-pond:hover {
+  transform: translateY(-2px);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.fishing-source-pond--active {
+  transform: scale(1.05);
+  border-color: #ffdc68;
+  box-shadow: 0 0 16px rgb(255 220 104 / 80%), 4px 4px 0 var(--ink);
+}
+.fishing-source-pond--waiting {
+  border-color: #f35d4f;
+  background: radial-gradient(circle at center, #ffd1cc, #7de2d1);
+  animation: waitingPondPulse 0.8s ease-in-out infinite alternate;
+}
+@keyframes waitingPondPulse {
+  from {
+    transform: scale(1.02);
+    box-shadow: 0 0 8px rgba(243, 93, 79, 0.4);
+  }
+  to {
+    transform: scale(1.06);
+    box-shadow: 0 0 16px rgba(243, 93, 79, 0.8);
+  }
+}
+.hook-wobble {
+  animation: hookWobble 0.25s ease-in-out infinite alternate;
+}
+@keyframes hookWobble {
+  from {
+    transform: translate(-50%, -35%) rotate(-8deg);
+  }
+  to {
+    transform: translate(-50%, -35%) rotate(8deg);
+  }
+}
+.hook-status-badge--waiting {
+  background: #ff7675 !important;
+  color: white !important;
+}
+.source-pond__label {
+  font-size: 12px;
+  font-weight: 900;
+  color: #0c5768;
+}
+.source-pond__water {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  font-size: 24px;
+  min-height: 44px;
+}
+.swimming-fish {
+  display: inline-block;
+  animation: swimPond 1.2s ease-in-out infinite alternate;
+}
+.swimming-fish--1 {
+  animation-delay: 0s;
+}
+.swimming-fish--2 {
+  animation-delay: 0.3s;
+  font-size: 22px;
+}
+.swimming-fish--3 {
+  animation-delay: 0.6s;
+}
+.source-pond__hint {
+  font-size: 9px;
+  font-weight: 800;
+  color: #0c5768;
+}
+
+/* Kotak Jawaban */
+.fishing-answer-box {
+  position: relative;
+  min-height: 126px;
+  padding: 30px 58px 12px 14px;
+  border: 3px dashed #148aa5;
+  border-radius: 12px;
+  background: rgb(223 246 251 / 85%);
+  box-shadow: inset 0 2px 6px rgb(20 138 165 / 15%);
+  transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+.fishing-answer-box--highlight {
+  border-color: #0c8ca5;
+  border-style: solid;
+  background: radial-gradient(circle at center, rgb(184 246 235 / 98%), rgb(148 238 225 / 90%));
+  transform: scale(1.02);
+  box-shadow: 0 0 14px rgb(20 180 180 / 50%);
+}
+.fishing-answer-box__label {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  font-size: 13px;
+  font-weight: 900;
+  color: #0c5768;
+}
+.fishing-answer-box__fishes {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 4px;
+  align-content: center;
+  min-height: 64px;
+  font-size: 25px;
+}
+.fishing-answer-box__empty-hint {
+  grid-column: 1 / -1;
+  font-size: 13px;
+  font-weight: 800;
+  color: #559dae;
+  text-align: center;
+  margin: auto;
+}
+.pond-fish {
+  animation: pop 0.25s ease-out, swimPond 1.2s ease-in-out infinite alternate;
+  display: inline-block;
+}
+@keyframes swimPond {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-2px) rotate(4deg);
+  }
+}
+.fishing-answer-box output {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font: 800 36px "Baloo 2";
+  color: #0c5768;
+}
+.fishing-answer__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.dragging-rod-set {
+  position: fixed;
+  z-index: 100;
+  transform: translate(-95%, -76%);
+  pointer-events: none;
+  width: 150px;
+  height: 150px;
+  filter: drop-shadow(4px 6px 0 rgb(23 50 77 / 35%));
+}
+.dragging-rod-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.dragging-empty-hook {
+  position: absolute;
+  left: 95%;
+  top: 76%;
+  transform: translate(-50%, -35%);
+  font-size: 28px;
+}
+.dragging-hooked-fish {
+  position: absolute;
+  left: 95%;
+  top: 76%;
+  transform: translate(-50%, -35%) rotate(-35deg);
+  font-size: 34px;
+  line-height: 1;
+  animation: fishOnHook 0.45s ease-in-out infinite alternate;
+}
+.hook-status-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffdc68;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--ink);
+  white-space: nowrap;
+  animation: pop 0.2s ease-out;
+}
+.splash-bubble {
+  position: absolute;
+  bottom: -15px;
+  right: -20px;
+  background: #8bd4a5;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 3px 8px;
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--ink);
+  white-space: nowrap;
+  animation: pop 0.2s ease-out;
+}
+
+/* Bird Shooting Game Styles */
+.shooting-answer {
+  display: grid;
+  grid-template-columns: 120px 140px minmax(240px, 380px) auto;
+  align-items: center;
+  gap: 14px;
+}
+.shooting-dock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.slingshot-control {
+  width: 120px;
+  height: 126px !important;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: none !important;
+  border-radius: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  cursor: grab;
+  touch-action: none;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  padding: 0;
+  user-select: none;
+}
+.slingshot-control:not(:disabled):hover {
+  transform: translateY(-4px) scale(1.06);
+}
+.slingshot-control:not(:disabled):active,
+.slingshot-control--dragging {
+  cursor: grabbing;
+  transform: scale(0.95);
+}
+.slingshot-preview {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.slingshot-graphic {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  background: #ffec99;
+  box-shadow: 4px 4px 0 var(--ink);
+  transition: transform 0.15s ease;
+}
+.slingshot-emoji {
+  font-size: 38px;
+  animation: pulseTarget 1.5s ease-in-out infinite alternate;
+}
+@keyframes pulseTarget {
+  from {
+    transform: scale(0.92);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+.crosshair-marker {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  background: #ff6b6b;
+  color: white;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  box-shadow: 2px 2px 0 var(--ink);
+  animation: hookBob 1.2s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+.crosshair-marker svg {
+  width: 18px;
+  height: 18px;
+}
+.slingshot-hint {
+  font-size: 11px;
+  font-weight: 900;
+  color: #8c5800;
+  margin-top: 4px;
+}
+
+/* Pohon Sasaran Realistis (Realistic Tree) */
+.realistic-tree {
+  height: 136px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 4px 6px;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-align: center;
+}
+.realistic-tree:hover {
+  transform: translateY(-3px) scale(1.03);
+}
+.realistic-tree--aiming {
+  transform: scale(1.06);
+  filter: drop-shadow(0 0 16px rgba(255, 82, 82, 0.7));
+}
+.tree-top {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.tree-crown {
+  position: relative;
+  width: 120px;
+  height: 80px;
+  background: radial-gradient(circle at 50% 30%, #7cd747, #3e9a1b, #216d07);
+  border: 3px solid var(--ink);
+  border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+  box-shadow: 4px 4px 0 var(--ink), inset 0 4px 8px rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tree-crown::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 20px;
+  width: 45px;
+  height: 45px;
+  background: #7cd747;
+  border-radius: 50%;
+  border: 3px solid var(--ink);
+  border-bottom: none;
+  border-right: none;
+  z-index: 1;
+}
+.tree-crown::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background: #60c528;
+  border-radius: 50%;
+  border: 3px solid var(--ink);
+  border-bottom: none;
+  border-left: none;
+  z-index: 1;
+}
+.tree-branch {
+  position: absolute;
+  bottom: 12px;
+  height: 6px;
+  background: #824b20;
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  z-index: 2;
+}
+.tree-branch--left {
+  left: -6px;
+  width: 28px;
+  transform: rotate(-15deg);
+}
+.tree-branch--right {
+  right: -6px;
+  width: 32px;
+  transform: rotate(15deg);
+}
+.tree-trunk {
+  width: 26px;
+  height: 24px;
+  background: linear-gradient(to right, #6b3d16, #925828, #5a300d);
+  border: 3px solid var(--ink);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 3px 3px 0 var(--ink);
+  margin-top: -3px;
+  position: relative;
+  z-index: 0;
+}
+.tree-bark-line {
+  position: absolute;
+  left: 50%;
+  top: 2px;
+  bottom: 2px;
+  width: 2px;
+  background: #3e2008;
+}
+.perched-birds-group {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+}
+.realistic-bird {
+  position: absolute;
+  font-size: 24px;
+  line-height: 1;
+  filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.25));
+  animation: realisticBirdHop 1.2s ease-in-out infinite alternate;
+}
+.bird-pos-1 {
+  top: 10px;
+  left: 14px;
+  animation-delay: 0s;
+}
+.bird-pos-2 {
+  top: -8px;
+  left: 46px;
+  font-size: 26px;
+  animation-delay: 0.3s;
+}
+.bird-pos-3 {
+  bottom: 10px;
+  right: 14px;
+  animation-delay: 0.6s;
+}
+.bird-pos-4 {
+  bottom: 6px;
+  left: 36px;
+  font-size: 20px;
+  animation-delay: 0.9s;
+}
+@keyframes realisticBirdHop {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(4deg);
+  }
+  100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+}
+.aim-crosshair-anim {
+  position: absolute;
+  top: -12px;
+  background: #ff3838;
+  color: white;
+  font-weight: 900;
+  font-size: 11px;
+  padding: 3px 7px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  z-index: 10;
+  animation: pop 0.18s ease-out;
+}
+.realistic-tree__label {
+  font-size: 11px;
+  font-weight: 900;
+  color: #1b5022;
+  margin-top: 2px;
+}
+.realistic-tree__hint {
+  font-size: 9px;
+  font-weight: 800;
+  color: #1b5022;
+}
+
+/* Sangkar Jawaban */
+.shooting-cage-box {
+  position: relative;
+  min-height: 126px;
+  padding: 30px 58px 12px 14px;
+  border: 3px dashed #a05a10;
+  border-radius: 12px;
+  background: rgb(255 249 224 / 90%);
+  box-shadow: inset 0 2px 6px rgb(160 90 16 / 15%);
+  transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+.shooting-cage-box--highlight {
+  border-color: #e67e22;
+  border-style: solid;
+  background: radial-gradient(circle at center, rgb(255 241 184 / 98%), rgb(255 224 130 / 90%));
+  transform: scale(1.02);
+  box-shadow: 0 0 14px rgb(230 126 34 / 50%);
+}
+.shooting-cage-box__label {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  font-size: 13px;
+  font-weight: 900;
+  color: #783e00;
+}
+.shooting-cage-box__birds {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 4px;
+  align-content: center;
+  min-height: 64px;
+  font-size: 25px;
+}
+.shooting-cage-box__empty-hint {
+  grid-column: 1 / -1;
+  font-size: 13px;
+  font-weight: 800;
+  color: #a27236;
+  text-align: center;
+  margin: auto;
+}
+.cage-bird {
+  animation: pop 0.25s ease-out, birdFlap 1.2s ease-in-out infinite alternate;
+  display: inline-block;
+}
+.shooting-cage-box output {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font: 800 36px "Baloo 2";
+  color: #783e00;
+}
+.shooting-answer__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Bidikan Dragging */
+.dragging-slingshot-set {
+  position: fixed;
+  z-index: 100;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  width: 90px;
+  height: 90px;
+  display: grid;
+  place-items: center;
+  filter: drop-shadow(4px 6px 0 rgb(23 50 77 / 35%));
+}
+.dragging-crosshair {
+  width: 70px;
+  height: 70px;
+  display: grid;
+  place-items: center;
+  background: rgb(255 107 107 / 85%);
+  color: white;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  animation: pulseTarget 0.8s ease-in-out infinite alternate;
+}
+.dragging-crosshair svg {
+  width: 36px;
+  height: 36px;
+}
+.dragging-flying-bird {
+  font-size: 44px;
+  animation: birdFlap 0.35s ease-in-out infinite alternate;
+}
+.dragging-aiming-flash {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.flash-effect {
+  font-size: 48px;
+  animation: pop 0.15s ease-out infinite alternate;
+}
+.aiming-badge {
+  background: #ff5252;
+  color: white;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: 900;
+  animation: pulseTarget 0.5s ease-in-out infinite alternate;
+}
+.hit-status-badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ff5252;
+  color: white;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 900;
+  white-space: nowrap;
+  animation: pop 0.2s ease-out;
+}
+
+/* Space Explorer Styles */
+.space-answer {
+  display: grid;
+  grid-template-columns: 130px minmax(320px, 560px) auto;
+  align-items: center;
+  gap: 16px;
+}
+.astronaut-source {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+.astronaut-source .source-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #c4b5fd;
+}
+.draggable-astronaut-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.draggable-astronaut-slot:hover {
+  transform: translateY(-3px) scale(1.06);
+}
+.draggable-astronaut-slot:active {
+  cursor: grabbing;
+  transform: scale(0.96);
+}
+.astronaut-suit-bubble {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #d8b4fe 55%, #7c3aed 100%);
+  border: 3px solid #ede9fe;
+  box-shadow: 0 0 16px rgba(167, 139, 250, 0.6), 4px 4px 0 #0f172a;
+  display: grid;
+  place-items: center;
+  font-size: 40px;
+}
+.source-astronaut-icon {
+  animation: floatingAstronaut 1.6s ease-in-out infinite alternate;
+  display: inline-block;
+}
+.drag-helper-text {
+  font-size: 11px;
+  font-weight: 900;
+  color: #cbd5e1;
+}
+@keyframes floatingAstronaut {
+  from {
+    transform: translateY(0) rotate(-4deg);
+  }
+  to {
+    transform: translateY(-4px) rotate(4deg);
+  }
+}
+
+/* Roket Realistis Horizontal */
+.realistic-horizontal-rocket {
+  position: relative;
+  display: grid;
+  grid-template-columns: 44px 1fr 48px;
+  align-items: center;
+  min-height: 130px;
+  background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 45%, #94a3b8 100%);
+  border: 4px solid #0f172a;
+  border-radius: 36px 14px 14px 36px;
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3), 6px 6px 0 #000;
+  padding: 8px 10px;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.realistic-horizontal-rocket--target {
+  transform: scale(1.03);
+  border-color: #38bdf8;
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.8), 6px 6px 0 #000;
+}
+
+/* Moncong Roket di Sisi Kiri */
+.rocket-nose-left {
+  position: relative;
+  width: 100%;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.rocket-nose-tip {
+  position: absolute;
+  left: -8px;
+  width: 0;
+  height: 0;
+  border-top: 36px solid transparent;
+  border-bottom: 36px solid transparent;
+  border-right: 36px solid #ef4444;
+  filter: drop-shadow(-2px 0 0 #0f172a);
+}
+.rocket-stripe--front {
+  position: absolute;
+  left: 24px;
+  top: 6px;
+  bottom: 6px;
+  width: 8px;
+  background: #3b82f6;
+  border-radius: 2px;
+}
+
+/* Bagian Tengah / Kabin Penumpang */
+.rocket-body-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4px 44px 4px 8px;
+  min-height: 110px;
+}
+.rocket-header-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  padding-bottom: 3px;
+  border-bottom: 2px dashed #64748b;
+}
+.rocket-ship-name {
+  font-size: 11px;
+  font-weight: 900;
+  color: #1e293b;
+  letter-spacing: 1px;
+}
+.rocket-cabin-title {
+  font-size: 10px;
+  font-weight: 800;
+  color: #475569;
+}
+.rocket-passengers-grid {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 3px;
+  align-content: center;
+  min-height: 60px;
+  font-size: 26px;
+}
+.rocket-empty-hint {
+  grid-column: 1 / -1;
+  font-size: 12px;
+  font-weight: 800;
+  color: #475569;
+  text-align: center;
+  margin: auto;
+}
+.rocket-astronaut {
+  display: inline-block;
+  animation: pop 0.25s ease-out, floatingAstronaut 1.8s ease-in-out infinite alternate;
+}
+
+/* Ekor & Semburan Api Pendorong di Kanan */
+.rocket-engine-right {
+  position: relative;
+  width: 100%;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.rocket-fin {
+  position: absolute;
+  right: 8px;
+  width: 22px;
+  height: 18px;
+  background: #ef4444;
+  border: 3px solid #0f172a;
+}
+.rocket-fin--top {
+  top: 4px;
+  transform: skewX(-25deg);
+  border-radius: 4px 4px 0 0;
+}
+.rocket-fin--bottom {
+  bottom: 4px;
+  transform: skewX(25deg);
+  border-radius: 0 0 4px 4px;
+}
+.rocket-nozzle {
+  position: absolute;
+  right: 0px;
+  width: 14px;
+  height: 42px;
+  background: #334155;
+  border: 3px solid #0f172a;
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+}
+.rocket-horizontal-flame {
+  position: absolute;
+  right: -24px;
+  display: flex;
+  align-items: center;
+}
+.flame-layer--outer {
+  font-size: 28px;
+  transform: rotate(90deg);
+  animation: flameHorizontal 0.35s ease-in-out infinite alternate;
+}
+.flame-layer--core {
+  position: absolute;
+  left: 2px;
+  font-size: 16px;
+  animation: flameHorizontal 0.2s ease-in-out infinite alternate;
+}
+@keyframes flameHorizontal {
+  from {
+    transform: rotate(90deg) scale(0.9) translateX(0);
+  }
+  to {
+    transform: rotate(90deg) scale(1.2) translateX(4px);
+  }
+}
+
+.realistic-horizontal-rocket output {
+  position: absolute;
+  right: 58px;
+  top: 50%;
+  transform: translateY(-50%);
+  font: 800 36px "Baloo 2";
+  color: #1e1b4b;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+.space-answer__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.space-answer__actions > button {
+  width: 48px;
+}
+.space-answer__actions .primary-button {
+  width: auto;
+  display: flex;
+  grid-auto-flow: column;
+  gap: 8px;
+  padding: 0 18px;
+  background: #8b5cf6;
+  color: white;
+  border: 2px solid #ede9fe;
+}
+
+.dragging-astronaut {
+  position: fixed;
+  z-index: 100;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  font-size: 48px;
+  display: flex;
+  align-items: center;
+  filter: drop-shadow(4px 6px 0 rgb(0 0 0 / 50%));
+}
+.dragging-astronaut-avatar {
+  animation: floatingAstronaut 0.6s ease-in-out infinite alternate;
+}
+.space-dust {
+  font-size: 20px;
+  margin-left: -10px;
+  margin-top: -20px;
+}
+.space-entry-badge {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #38bdf8;
+  color: #0f172a;
+  border: 2px solid white;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 900;
+  white-space: nowrap;
+  animation: pop 0.2s ease-out;
+}
+
 .result {
   padding: 36px 70px;
   text-align: center;
   border: 4px solid var(--ink);
-  border-radius: 8px;
+  border-radius: 12px;
   background: white;
+  color: var(--ink) !important;
   box-shadow: 10px 10px 0 var(--ink);
   animation: pop 0.35s ease-out;
+  position: relative;
+  z-index: 10;
 }
 .result__icon {
   width: 82px;
@@ -586,6 +1711,7 @@ button:disabled {
   place-items: center;
   border: 3px solid var(--ink);
   border-radius: 50%;
+  color: var(--ink);
 }
 .result__icon svg {
   width: 44px;
@@ -596,14 +1722,68 @@ button:disabled {
 }
 .result--wrong .result__icon {
   background: #ffb5a8;
+  color: #b91c1c;
+}
+.result--space.result--correct .result__icon {
+  background: linear-gradient(135deg, #a78bfa, #818cf8);
+  color: #ffffff;
+  animation: rocketLaunchShake 0.6s ease-in-out infinite alternate;
+}
+@keyframes rocketLaunchShake {
+  from {
+    transform: translateY(0) rotate(-4deg);
+  }
+  to {
+    transform: translateY(-6px) rotate(4deg) scale(1.08);
+  }
 }
 .result h2 {
-  margin: 16px 0 4px;
+  margin: 16px 0 6px;
   font: 800 34px "Baloo 2";
+  color: var(--ink) !important;
+}
+.result--correct h2 {
+  color: #1b6a37 !important;
+}
+.result--wrong h2 {
+  color: #c2410c !important;
+}
+.result--space.result--correct h2 {
+  color: #4338ca !important;
 }
 .result p {
   margin: 0;
   font-size: 22px;
+  font-weight: 700;
+  color: #334155 !important;
+}
+.result p strong {
+  color: var(--coral) !important;
+  font-size: 26px;
+}
+.result--space.result--correct p strong {
+  color: #4f46e5 !important;
+}
+.launch-celebration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 22px;
+  animation: pop 0.3s ease-out;
+}
+.launch-rocket-animated {
+  display: inline-block;
+  animation: rocketFlyUp 0.8s ease-in-out infinite alternate;
+}
+@keyframes rocketFlyUp {
+  0% {
+    transform: translateY(0) rotate(-15deg);
+  }
+  100% {
+    transform: translateY(-8px) rotate(-10deg) scale(1.15);
+  }
 }
 .instruction {
   min-height: 48px;
@@ -693,7 +1873,10 @@ button:disabled {
     padding: 10px;
     box-shadow: 5px 5px 0 var(--ink);
   }
-  .nest {
+  .nest,
+  .aquarium-piece,
+  .tree-piece,
+  .planet-piece {
     width: 100px;
     min-height: 112px;
     padding: 8px;
@@ -712,7 +1895,7 @@ button:disabled {
     font-size: 34px;
   }
   .number-pad {
-    grid-template-columns: repeat(7, minmax(36px, 44px));
+    grid-template-columns: repeat(6, minmax(36px, 44px));
     gap: 5px;
   }
   .number-pad button {
@@ -721,18 +1904,65 @@ button:disabled {
   .result {
     padding: 28px 36px;
   }
-  .farmer-answer {
+  .farmer-answer,
+  .space-answer {
     grid-template-columns: 92px minmax(190px, 1fr);
     gap: 10px;
   }
-  .chick-coop {
-    min-height: 112px;
+  .fishing-answer,
+  .shooting-answer {
+    grid-template-columns: 95px 110px minmax(160px, 1fr);
+    gap: 8px;
   }
-  .chick-coop__chicks {
+  .fishing-rod-control,
+  .slingshot-control {
+    width: 90px;
+    height: 105px !important;
+  }
+  .rod-preview,
+  .slingshot-preview {
+    width: 80px;
+    height: 80px;
+  }
+  .fishing-source-pond,
+  .realistic-tree {
+    height: 115px;
+    padding: 4px 2px;
+  }
+  .tree-crown {
+    width: 95px;
+    height: 65px;
+  }
+  .realistic-bird {
+    font-size: 18px;
+  }
+  .bird-pos-2 {
+    font-size: 20px;
+  }
+  .bird-pos-4 {
+    font-size: 16px;
+  }
+  .source-pond__water {
+    font-size: 18px;
+    min-height: 32px;
+  }
+  .chick-coop,
+  .fishing-answer-box,
+  .shooting-cage-box,
+  .realistic-horizontal-rocket {
+    min-height: 105px;
+  }
+  .chick-coop__chicks,
+  .fishing-answer-box__fishes,
+  .shooting-cage-box__birds,
+  .rocket-passengers-grid {
     grid-template-columns: repeat(10, minmax(0, 1fr));
     font-size: 21px;
   }
-  .farmer-answer__actions {
+  .farmer-answer__actions,
+  .fishing-answer__actions,
+  .shooting-answer__actions,
+  .space-answer__actions {
     grid-column: 1 / -1;
     flex-direction: row;
     justify-content: center;
@@ -750,18 +1980,64 @@ button:disabled {
     width: 68px;
     border-width: 3px;
   }
-  .nest {
+  .nest,
+  .aquarium-piece,
+  .tree-piece,
+  .planet-piece {
     width: 82px;
     min-height: 100px;
   }
-  .nest__chicks {
+  .nest__chicks,
+  .aquarium-piece__fishes,
+  .tree-piece__birds,
+  .planet-piece__astronauts {
     font-size: 18px;
   }
   .question-mark {
     width: 56px;
   }
-  .farmer-answer {
+  .farmer-answer,
+  .space-answer {
     grid-template-columns: 74px minmax(0, 1fr);
+    width: 100%;
+  }
+  .space-answer .astronaut-suit-bubble {
+    width: 56px;
+    height: 56px;
+    font-size: 28px;
+  }
+  .realistic-horizontal-rocket {
+    min-height: 95px;
+    grid-template-columns: 32px 1fr 36px;
+    padding: 4px 6px;
+  }
+  .rocket-nose-tip {
+    border-top: 26px solid transparent;
+    border-bottom: 26px solid transparent;
+    border-right: 26px solid #ef4444;
+  }
+  .rocket-stripe--front {
+    left: 18px;
+    width: 5px;
+  }
+  .rocket-fin {
+    width: 16px;
+    height: 12px;
+  }
+  .rocket-horizontal-flame {
+    right: -16px;
+  }
+  .flame-layer--outer {
+    font-size: 20px;
+  }
+  .realistic-horizontal-rocket output {
+    right: 44px;
+    font-size: 24px;
+  }
+  .fishing-answer,
+  .shooting-answer {
+    grid-template-columns: 75px 85px minmax(0, 1fr);
+    gap: 6px;
     width: 100%;
   }
   .farmer-answer .draggable-chick {
@@ -769,18 +2045,71 @@ button:disabled {
     height: 56px;
     font-size: 29px;
   }
-  .chick-coop {
-    min-height: 104px;
-    padding-right: 42px;
+  .fishing-rod-control,
+  .slingshot-control {
+    width: 72px;
+    height: 80px !important;
   }
-  .chick-coop__chicks {
-    grid-template-columns: repeat(10, minmax(0, 1fr));
+  .rod-preview,
+  .slingshot-preview {
+    width: 52px;
+    height: 52px;
+  }
+  .hook-marker,
+  .crosshair-marker {
+    font-size: 16px;
+  }
+  .fishing-source-pond,
+  .realistic-tree {
+    height: 95px;
+    padding: 2px 2px;
+  }
+  .tree-crown {
+    width: 78px;
+    height: 52px;
+  }
+  .realistic-bird {
+    font-size: 15px;
+  }
+  .bird-pos-2 {
+    font-size: 17px;
+  }
+  .bird-pos-4 {
+    font-size: 13px;
+  }
+  .source-pond__water {
+    font-size: 16px;
+    min-height: 28px;
+  }
+  .source-pond__label,
+  .realistic-tree__label {
+    font-size: 10px;
+  }
+  .source-pond__hint,
+  .realistic-tree__hint {
+    font-size: 8px;
+  }
+  .chick-coop,
+  .fishing-answer-box,
+  .shooting-cage-box,
+  .rocket-answer-cabin {
+    min-height: 95px;
+    padding-right: 36px;
+  }
+  .chick-coop__chicks,
+  .fishing-answer-box__fishes,
+  .shooting-cage-box__birds,
+  .rocket-passengers-grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
     gap: 1px;
-    font-size: 19px;
+    font-size: 17px;
   }
-  .chick-coop output {
-    right: 9px;
-    font-size: 30px;
+  .chick-coop output,
+  .fishing-answer-box output,
+  .shooting-cage-box output,
+  .rocket-answer-cabin output {
+    right: 8px;
+    font-size: 26px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

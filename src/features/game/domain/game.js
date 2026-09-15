@@ -23,7 +23,7 @@ export function createInitialGameState(operation = OPERATIONS.ADD) {
 export function calculateAnswer(firstNumber, secondNumber, operation) {
   return operation === OPERATIONS.ADD
     ? firstNumber + secondNumber
-    : firstNumber - secondNumber;
+    : Math.max(0, firstNumber - secondNumber);
 }
 
 export function revealFirst(state, value) {
@@ -33,6 +33,14 @@ export function revealFirst(state, value) {
 
 export function revealSecond(state, value) {
   if (state.status !== GAME_STATUS.FIRST_REVEALED) return state;
+  if (state.operation === OPERATIONS.SUBTRACT && state.firstNumber < value) {
+    return {
+      ...state,
+      firstNumber: value,
+      secondNumber: state.firstNumber,
+      status: GAME_STATUS.READY,
+    };
+  }
   return { ...state, secondNumber: value, status: GAME_STATUS.READY };
 }
 
@@ -64,5 +72,17 @@ export function nextQuestion(state) {
 
 export function changeOperation(state, operation) {
   if (!Object.values(OPERATIONS).includes(operation)) return state;
+  if (
+    operation === OPERATIONS.SUBTRACT &&
+    state.status === GAME_STATUS.READY &&
+    state.firstNumber < state.secondNumber
+  ) {
+    return {
+      ...state,
+      operation,
+      firstNumber: state.secondNumber,
+      secondNumber: state.firstNumber,
+    };
+  }
   return { ...state, operation };
 }

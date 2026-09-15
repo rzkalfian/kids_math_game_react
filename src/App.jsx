@@ -2,8 +2,11 @@ import { useState } from "react";
 import {
   ArrowRight,
   Bird,
+  Fish,
   Grid3X3,
+  Rocket,
   Spade,
+  Target,
   Volume2,
   VolumeX,
 } from "lucide-react";
@@ -35,6 +38,27 @@ const GAMES = [
     description: "Belajar berhitung bersama anak ayam.",
     icon: Bird,
     color: "green",
+  },
+  {
+    id: "fishing",
+    title: "Pancing Ikan",
+    description: "Mancing ikan dengan joran dan kail.",
+    icon: Fish,
+    color: "cyan",
+  },
+  {
+    id: "shooting",
+    title: "Tembak Burung",
+    description: "Bidik burung di pohon hijau.",
+    icon: Target,
+    color: "yellow",
+  },
+  {
+    id: "space",
+    title: "Jelajah Angkasa",
+    description: "Ajak para astronot naik ke dalam roket luar angkasa.",
+    icon: Rocket,
+    color: "purple",
   },
 ];
 

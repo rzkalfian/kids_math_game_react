@@ -15,11 +15,13 @@ import {
 } from "lucide-react";
 import { calculateAnswer, GAME_STATUS, OPERATIONS } from "../../domain/game.js";
 import { useGame } from "../../application/useGame.js";
+import birdImg from "../../../../assets/images/bird.svg";
 import { BirdShootingAnswer } from "./BirdShootingAnswer.jsx";
 import { Dice } from "./Dice.jsx";
 import { FishingAnswer } from "./FishingAnswer.jsx";
 import { NumberPad } from "./NumberPad.jsx";
 import { SpaceExplorerAnswer } from "./SpaceExplorerAnswer.jsx";
+import { INITIAL_ANSWERS } from "../../constants.js";
 
 const LEVELS = [
   { id: 1, label: "Level 1", minimum: 1, maximum: 10 },
@@ -78,7 +80,11 @@ function PlayingPiece({ mode, value, slot, rolling, onClick, disabled }) {
         disabled={disabled}
       >
         <span className="tree-piece__birds" aria-hidden="true">
-          {value ? "🐦".repeat(value) : "❓"}
+          {value
+            ? Array.from({ length: value }, (_, index) => (
+                <img key={index} className="bird-icon" src={birdImg} alt="" />
+              ))
+            : "❓"}
         </span>
         <small>{value ? `${value} ekor burung` : `Buka ${slot}`}</small>
       </button>
@@ -216,11 +222,7 @@ function FarmerDragAnswer({ value, onChange, onSubmit, onAddChick }) {
 export function GameBoard({ mode, randomNumberRepository, onBack, audio }) {
   const { state, rollingSlot, roll, submitAnswer, changeOperation, restart } =
     useGame(randomNumberRepository);
-  const [input, setInput] = useState("");
-  const [farmerAnswer, setFarmerAnswer] = useState(0);
-  const [fishingAnswer, setFishingAnswer] = useState(0);
-  const [shootingAnswer, setShootingAnswer] = useState(0);
-  const [spaceAnswer, setSpaceAnswer] = useState(0);
+  const [answers, setAnswers] = useState(INITIAL_ANSWERS);
   const [level, setLevel] = useState(LEVELS[0]);
   const answer = calculateAnswer(
     state.firstNumber,
@@ -245,11 +247,11 @@ export function GameBoard({ mode, randomNumberRepository, onBack, audio }) {
   }, [audio, mode, state.status]);
 
   function resetAnswers() {
-    setInput("");
-    setFarmerAnswer(0);
-    setFishingAnswer(0);
-    setShootingAnswer(0);
-    setSpaceAnswer(0);
+    setAnswers(INITIAL_ANSWERS);
+  }
+
+  function updateAnswer(name, value) {
+    setAnswers((current) => ({ ...current, [name]: value }));
   }
 
   function submit(value) {
@@ -472,40 +474,40 @@ export function GameBoard({ mode, randomNumberRepository, onBack, audio }) {
             {state.status === GAME_STATUS.READY &&
               (mode === "farmer" ? (
                 <FarmerDragAnswer
-                  value={farmerAnswer}
-                  onChange={setFarmerAnswer}
-                  onSubmit={() => submit(farmerAnswer)}
+                  value={answers.farmer}
+                  onChange={(value) => updateAnswer("farmer", value)}
+                  onSubmit={() => submit(answers.farmer)}
                   onAddChick={audio.playChickenSound}
                 />
               ) : mode === "fishing" ? (
                 <FishingAnswer
-                  value={fishingAnswer}
-                  onChange={setFishingAnswer}
-                  onSubmit={() => submit(fishingAnswer)}
+                  value={answers.fishing}
+                  onChange={(value) => updateAnswer("fishing", value)}
+                  onSubmit={() => submit(answers.fishing)}
                   onFishStart={audio.playFishStartSound}
                   onGetFish={audio.playGetFishSound}
                 />
               ) : mode === "shooting" ? (
                 <BirdShootingAnswer
-                  value={shootingAnswer}
-                  onChange={setShootingAnswer}
-                  onSubmit={() => submit(shootingAnswer)}
+                  value={answers.shooting}
+                  onChange={(value) => updateAnswer("shooting", value)}
+                  onSubmit={() => submit(answers.shooting)}
                   onShootGun={audio.playShootSound}
                   onStopShootGun={audio.stopShootSound}
                   onHitBird={audio.playHitBirdSound}
                 />
               ) : mode === "space" ? (
                 <SpaceExplorerAnswer
-                  value={spaceAnswer}
-                  onChange={setSpaceAnswer}
-                  onSubmit={() => submit(spaceAnswer)}
+                  value={answers.space}
+                  onChange={(value) => updateAnswer("space", value)}
+                  onSubmit={() => submit(answers.space)}
                   onAddAstronaut={audio.playAstronautBoardSound}
                 />
               ) : (
                 <NumberPad
-                  value={input}
-                  onChange={setInput}
-                  onSubmit={() => submit(Number(input))}
+                  value={answers.input}
+                  onChange={(value) => updateAnswer("input", value)}
+                  onSubmit={() => submit(Number(answers.input))}
                 />
               ))}
           </>

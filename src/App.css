@@ -1171,7 +1171,7 @@ button:disabled {
   margin-top: 4px;
 }
 
-/* Pohon Sasaran Realistis (Realistic Tree) */
+/* Pohon Sasaran (gambar tree.png) */
 .realistic-tree {
   height: 136px;
   position: relative;
@@ -1179,7 +1179,7 @@ button:disabled {
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  padding: 4px 6px;
+  padding: 2px;
   cursor: pointer;
   touch-action: none;
   user-select: none;
@@ -1193,125 +1193,41 @@ button:disabled {
   transform: scale(1.06);
   filter: drop-shadow(0 0 16px rgba(255, 82, 82, 0.7));
 }
-.tree-top {
+.realistic-tree__stage {
   position: relative;
+  flex: 1;
+  min-height: 0;
   width: 100%;
-  display: flex;
-  justify-content: center;
-}
-.tree-crown {
-  position: relative;
-  width: 120px;
-  height: 80px;
-  background: radial-gradient(circle at 50% 30%, #7cd747, #3e9a1b, #216d07);
-  border: 3px solid var(--ink);
-  border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
-  box-shadow: 4px 4px 0 var(--ink), inset 0 4px 8px rgba(255, 255, 255, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.tree-crown::before {
-  content: "";
-  position: absolute;
-  top: -8px;
-  left: 20px;
-  width: 45px;
-  height: 45px;
-  background: #7cd747;
-  border-radius: 50%;
-  border: 3px solid var(--ink);
-  border-bottom: none;
-  border-right: none;
-  z-index: 1;
-}
-.tree-crown::after {
-  content: "";
-  position: absolute;
-  top: -6px;
-  right: 20px;
-  width: 50px;
-  height: 50px;
-  background: #60c528;
-  border-radius: 50%;
-  border: 3px solid var(--ink);
-  border-bottom: none;
-  border-left: none;
-  z-index: 1;
-}
-.tree-branch {
-  position: absolute;
-  bottom: 12px;
-  height: 6px;
-  background: #824b20;
-  border: 2px solid var(--ink);
-  border-radius: 4px;
-  z-index: 2;
-}
-.tree-branch--left {
-  left: -6px;
-  width: 28px;
-  transform: rotate(-15deg);
-}
-.tree-branch--right {
-  right: -6px;
-  width: 32px;
-  transform: rotate(15deg);
-}
-.tree-trunk {
-  width: 26px;
-  height: 24px;
-  background: linear-gradient(to right, #6b3d16, #925828, #5a300d);
-  border: 3px solid var(--ink);
-  border-top: none;
-  border-radius: 0 0 6px 6px;
-  box-shadow: 3px 3px 0 var(--ink);
-  margin-top: -3px;
-  position: relative;
-  z-index: 0;
-}
-.tree-bark-line {
-  position: absolute;
-  left: 50%;
-  top: 2px;
-  bottom: 2px;
-  width: 2px;
-  background: #3e2008;
-}
-.perched-birds-group {
-  position: relative;
-  z-index: 3;
+.tree-image {
   width: 100%;
   height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(3px 4px 0 rgb(23 50 77 / 22%));
 }
-.realistic-bird {
+.tree-birds-flock {
   position: absolute;
-  font-size: 24px;
-  line-height: 1;
-  filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.25));
-  animation: realisticBirdHop 1.2s ease-in-out infinite alternate;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 3;
+  /* birds.png berlatar putih, multiply menghapus latar tersebut */
+  mix-blend-mode: multiply;
+  animation: realisticBirdHop 1.6s ease-in-out infinite alternate;
 }
-.bird-pos-1 {
-  top: 10px;
-  left: 14px;
-  animation-delay: 0s;
-}
-.bird-pos-2 {
-  top: -8px;
-  left: 46px;
-  font-size: 26px;
-  animation-delay: 0.3s;
-}
-.bird-pos-3 {
-  bottom: 10px;
-  right: 14px;
-  animation-delay: 0.6s;
-}
-.bird-pos-4 {
-  bottom: 6px;
-  left: 36px;
-  font-size: 20px;
-  animation-delay: 0.9s;
+.bird-icon {
+  width: 1em;
+  height: 1em;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+  pointer-events: none;
 }
 @keyframes realisticBirdHop {
   0% {
@@ -1326,7 +1242,7 @@ button:disabled {
 }
 .aim-crosshair-anim {
   position: absolute;
-  top: -12px;
+  top: 0;
   background: #ff3838;
   color: white;
   font-weight: 900;
@@ -1393,7 +1309,6 @@ button:disabled {
 }
 .cage-bird {
   animation: pop 0.25s ease-out, birdFlap 1.2s ease-in-out infinite alternate;
-  display: inline-block;
 }
 .shooting-cage-box output {
   position: absolute;
@@ -1437,7 +1352,9 @@ button:disabled {
   height: 36px;
 }
 .dragging-flying-bird {
-  font-size: 44px;
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
   animation: birdFlap 0.35s ease-in-out infinite alternate;
 }
 .dragging-aiming-flash {
@@ -2144,22 +2061,27 @@ button:disabled {
     height: 115px;
     padding: 4px 2px;
   }
-  .tree-crown {
-    width: 95px;
-    height: 65px;
-  }
-  .realistic-bird {
-    font-size: 18px;
-  }
-  .bird-pos-2 {
-    font-size: 20px;
-  }
-  .bird-pos-4 {
-    font-size: 16px;
-  }
   .source-pond__water {
     font-size: 18px;
     min-height: 32px;
+  }
+  .shooting-answer {
+    grid-template-columns: 62px minmax(120px, 1.2fr) minmax(150px, 1.6fr);
+  }
+  .shooting-answer .slingshot-control {
+    width: 60px;
+    height: 74px !important;
+  }
+  .shooting-answer .slingshot-preview {
+    width: 54px;
+    height: 54px;
+  }
+  .slingshot-hint,
+  .realistic-tree__label {
+    display: none;
+  }
+  .shooting-answer .realistic-tree {
+    height: 132px;
   }
   .chick-coop,
   .fishing-answer-box,
@@ -2279,19 +2201,6 @@ button:disabled {
     height: 95px;
     padding: 2px 2px;
   }
-  .tree-crown {
-    width: 78px;
-    height: 52px;
-  }
-  .realistic-bird {
-    font-size: 15px;
-  }
-  .bird-pos-2 {
-    font-size: 17px;
-  }
-  .bird-pos-4 {
-    font-size: 13px;
-  }
   .source-pond__water {
     font-size: 16px;
     min-height: 28px;
@@ -2303,6 +2212,20 @@ button:disabled {
   .source-pond__hint,
   .realistic-tree__hint {
     font-size: 8px;
+  }
+  .shooting-answer {
+    grid-template-columns: 48px minmax(100px, 1.2fr) minmax(0, 1.5fr);
+  }
+  .shooting-answer .slingshot-control {
+    width: 46px;
+    height: 58px !important;
+  }
+  .shooting-answer .slingshot-preview {
+    width: 42px;
+    height: 42px;
+  }
+  .shooting-answer .realistic-tree {
+    height: 114px;
   }
   .chick-coop,
   .fishing-answer-box,

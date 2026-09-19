@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Check, Trash2 } from "lucide-react";
 import pancingImg from "../../../../assets/images/pancing.png";
+import { TIMINGS } from "../../constants.js";
 
 export function FishingAnswer({
   value,
@@ -41,7 +42,7 @@ export function FishingAnswer({
       setHasHookedFish(true);
       setIsWaitingFish(false);
       if (onGetFish) onGetFish();
-    }, 2000);
+    }, TIMINGS.DRAG_ACTION_MS);
   }
 
   function handleStartDrag(event, startFromPond = false) {
@@ -129,7 +130,7 @@ export function FishingAnswer({
       changeFishCount(fishCount + 1);
       setHasHookedFish(false);
       setIsWaitingFish(false);
-    }, 2000);
+    }, TIMINGS.DRAG_ACTION_MS);
   }
 
   return (

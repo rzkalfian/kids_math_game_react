@@ -1,5 +1,8 @@
-import { useEffect, useRef, useState } from "react";
 import { Check, Crosshair, Target, Trash2 } from "lucide-react";
+import birdImg from "../../../../assets/images/bird.svg";
+import { useBirdShooting } from "../useBirdShooting.js";
+import { BirdTreeTarget } from "./BirdTreeTarget.jsx";
+import { BirdCageBox } from "./BirdCageBox.jsx";
 
 export function BirdShootingAnswer({
   value,
@@ -9,138 +12,25 @@ export function BirdShootingAnswer({
   onStopShootGun,
   onHitBird,
 }) {
-  const birdCount = Math.max(0, value);
-  const targetAreaRef = useRef(null);
-  const cageBoxRef = useRef(null);
-  const shootTimerRef = useRef(null);
-
-  const [dragPosition, setDragPosition] = useState(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [isAiming, setIsAiming] = useState(false);
-  const [hasHitBird, setHasHitBird] = useState(false);
-  const [isOverTarget, setIsOverTarget] = useState(false);
-  const [isOverCage, setIsOverCage] = useState(false);
-
-  useEffect(() => {
-    return () => {
-      if (shootTimerRef.current) clearTimeout(shootTimerRef.current);
-    };
-  }, []);
-
-  function changeBirdCount(nextCount) {
-    onChange(Math.max(0, nextCount));
-  }
-
-  function triggerShoot() {
-    setIsAiming(true);
-    setHasHitBird(false);
-    if (onShootGun) {
-      onShootGun(() => {
-        setHasHitBird(true);
-        setIsAiming(false);
-        if (onHitBird) onHitBird();
-      }, 2000);
-    } else {
-      if (shootTimerRef.current) clearTimeout(shootTimerRef.current);
-      shootTimerRef.current = setTimeout(() => {
-        setHasHitBird(true);
-        setIsAiming(false);
-        if (onHitBird) onHitBird();
-      }, 2000);
-    }
-  }
-
-  function cancelAiming() {
-    setIsAiming(false);
-    if (shootTimerRef.current) clearTimeout(shootTimerRef.current);
-    if (onStopShootGun) onStopShootGun();
-  }
-
-  function handleStartDrag(event, startWithBird = false) {
-    event.currentTarget.setPointerCapture(event.pointerId);
-    setIsDragging(true);
-    setDragPosition({ x: event.clientX, y: event.clientY });
-
-    if (startWithBird) {
-      triggerShoot();
-    } else {
-      setHasHitBird(false);
-      setIsAiming(false);
-    }
-  }
-
-  function handlePointerMove(event) {
-    if (!isDragging) return;
-    const x = event.clientX;
-    const y = event.clientY;
-    setDragPosition({ x, y });
-
-    // Cek apakah bidikan berada di atas Pohon Burung
-    const targetBounds = targetAreaRef.current?.getBoundingClientRect();
-    const overTarget = Boolean(
-      targetBounds &&
-        x >= targetBounds.left &&
-        x <= targetBounds.right &&
-        y >= targetBounds.top &&
-        y <= targetBounds.bottom,
-    );
-    setIsOverTarget(overTarget);
-
-    // Ketika mulai membidik pohon dan belum dapat burung serta belum sedang menembak
-    if (overTarget && !hasHitBird && !isAiming) {
-      triggerShoot();
-    } else if (!overTarget && isAiming && !hasHitBird) {
-      cancelAiming();
-    }
-
-    // Cek apakah mengenai Sangkar Jawaban
-    const cageBounds = cageBoxRef.current?.getBoundingClientRect();
-    const overCage = Boolean(
-      cageBounds &&
-        x >= cageBounds.left &&
-        x <= cageBounds.right &&
-        y >= cageBounds.top &&
-        y <= cageBounds.bottom,
-    );
-    setIsOverCage(overCage);
-  }
-
-  function handlePointerUp(event) {
-    if (!isDragging) return;
-    if (shootTimerRef.current) clearTimeout(shootTimerRef.current);
-
-    const cageBounds = cageBoxRef.current?.getBoundingClientRect();
-    const isOver = Boolean(
-      cageBounds &&
-        event.clientX >= cageBounds.left &&
-        event.clientX <= cageBounds.right &&
-        event.clientY >= cageBounds.top &&
-        event.clientY <= cageBounds.bottom,
-    );
-
-    // Hanya jika melepaskan di sangkar jawaban & SUDAH mengenai burung (setelah 2 detik)
-    if (isOver && hasHitBird) {
-      changeBirdCount(birdCount + 1);
-    }
-
-    setDragPosition(null);
-    setIsDragging(false);
-    setIsAiming(false);
-    setHasHitBird(false);
-    setIsOverTarget(false);
-    setIsOverCage(false);
-  }
-
-  // Aksi interaktif klik langsung (ramah anak 3-4 tahun)
-  function handleDirectShoot() {
-    if (isAiming) return;
-    triggerShoot();
-    setTimeout(() => {
-      changeBirdCount(birdCount + 1);
-      setHasHitBird(false);
-      setIsAiming(false);
-    }, 2000);
-  }
+  const shooting = useBirdShooting({
+    value,
+    onChange,
+    onShootGun,
+    onStopShootGun,
+    onHitBird,
+  });
+  const {
+    birdCount,
+    dragPosition,
+    isDragging,
+    isAiming,
+    hasHitBird,
+    isOverCage,
+    handleStartDrag,
+    handlePointerMove,
+    handlePointerUp,
+    handlePointerCancel,
+  } = shooting;
 
   return (
     <div className="shooting-answer">
@@ -149,17 +39,10 @@ export function BirdShootingAnswer({
         <button
           type="button"
           className={`slingshot-control ${isDragging ? "slingshot-control--dragging" : ""}`}
-          onPointerDown={(e) => handleStartDrag(e, false)}
+          onPointerDown={(event) => handleStartDrag(event, false)}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
-          onPointerCancel={() => {
-            cancelAiming();
-            setDragPosition(null);
-            setIsDragging(false);
-            setHasHitBird(false);
-            setIsOverTarget(false);
-            setIsOverCage(false);
-          }}
+          onPointerCancel={handlePointerCancel}
           title="Tarik bidikan ke pohon burung, tunggu 2 detik tembakan untuk dapat burung"
           aria-label="Tarik bidikan ke pohon burung, tunggu 2 detik tembakan untuk dapat burung"
         >
@@ -177,72 +60,25 @@ export function BirdShootingAnswer({
         </button>
       </div>
 
-      {/* 2. Pohon Sasaran Berbentuk Pohon Realistis (Realistic Tree) */}
-      <div
-        ref={targetAreaRef}
-        className={`realistic-tree ${isOverTarget ? "realistic-tree--aiming" : ""}`}
-        onPointerDown={(e) => handleStartDrag(e, true)}
+      {/* 2. Pohon sasaran */}
+      <BirdTreeTarget
+        treeRef={shooting.treeRef}
+        isOverTarget={shooting.isOverTarget}
+        isAiming={isAiming}
+        hasHitBird={hasHitBird}
+        onStartDrag={handleStartDrag}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
-        onClick={handleDirectShoot}
-        role="button"
-        tabIndex={0}
-        aria-label="Pohon burung - bidik burung di pohon"
-        title="Arahkan bidikan ke sini untuk menembak burung (2 detik)"
-      >
-        <div className="tree-top">
-          <div className="tree-crown">
-            {/* Cabang & Ranting Pohon */}
-            <div className="tree-branch tree-branch--left" aria-hidden="true" />
-            <div className="tree-branch tree-branch--right" aria-hidden="true" />
-
-            {/* Burung-burung hinggap di ranting */}
-            <div className="perched-birds-group" aria-hidden="true">
-              <span className="realistic-bird bird-pos-1">🐦</span>
-              <span className="realistic-bird bird-pos-2">🦜</span>
-              <span className="realistic-bird bird-pos-3">🐦</span>
-              <span className="realistic-bird bird-pos-4">🕊️</span>
-            </div>
-
-            {isOverTarget && isAiming && (
-              <span className="aim-crosshair-anim">💥 Dor!</span>
-            )}
-          </div>
-        </div>
-        <div className="tree-trunk" aria-hidden="true">
-          <div className="tree-bark-line" />
-        </div>
-        <span className="realistic-tree__label">🌳 Pohon Burung</span>
-        <small className="realistic-tree__hint">
-          {isAiming
-            ? "Membidik (2 detik)... 💥"
-            : hasHitBird
-              ? "Burung kena! Geser ke sangkar ➡️"
-              : "Arahkan bidikan ke sini"}
-        </small>
-      </div>
+        onDirectShoot={shooting.handleDirectShoot}
+      />
 
       {/* 3. Kotak Jawaban: Sangkar Burung */}
-      <div
-        ref={cageBoxRef}
-        className={`shooting-cage-box ${isOverCage ? "shooting-cage-box--highlight" : ""}`}
-        aria-label={`Jawaban ${value}, sangkar berisi ${birdCount} burung`}
-      >
-        <span className="shooting-cage-box__label">🏠 Sangkar Jawaban</span>
-        <div className="shooting-cage-box__birds" aria-hidden="true">
-          {Array.from({ length: birdCount }, (_, index) => (
-            <span key={index} className="cage-bird">
-              🐦
-            </span>
-          ))}
-          {birdCount === 0 && (
-            <span className="shooting-cage-box__empty-hint">
-              Taruh burung hasil bidikan di sini...
-            </span>
-          )}
-        </div>
-        <output>{value}</output>
-      </div>
+      <BirdCageBox
+        cageRef={shooting.cageRef}
+        value={value}
+        birdCount={birdCount}
+        isOverCage={isOverCage}
+      />
 
       {/* 4. Set Bidikan / Burung yang Melayang Mengikuti Gerakan Kursor/Jari */}
       {isDragging && dragPosition && (
@@ -253,8 +89,8 @@ export function BirdShootingAnswer({
         >
           {hasHitBird ? (
             <>
-              <span className="dragging-flying-bird">🐦</span>
-              <span className="hit-status-badge">Burung Didapat! 🐦</span>
+              <img className="dragging-flying-bird" src={birdImg} alt="" />
+              <span className="hit-status-badge">Burung Didapat!</span>
             </>
           ) : isAiming ? (
             <div className="dragging-aiming-flash">
@@ -277,7 +113,7 @@ export function BirdShootingAnswer({
         <button
           type="button"
           disabled={birdCount === 0}
-          onClick={() => changeBirdCount(birdCount - 1)}
+          onClick={() => shooting.changeBirdCount(birdCount - 1)}
           title="Lepaskan satu burung"
           aria-label="Lepaskan satu burung"
         >

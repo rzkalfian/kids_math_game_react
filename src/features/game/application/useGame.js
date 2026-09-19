@@ -8,6 +8,7 @@ import {
   revealFirst,
   revealSecond,
 } from "../domain/game.js";
+import { TIMINGS } from "../constants.js";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -65,7 +66,10 @@ export function useGame(randomNumberRepository) {
   function submitAnswer(value) {
     if (!Number.isInteger(value) || state.status !== GAME_STATUS.READY) return;
     dispatch({ type: "answer", value });
-    resetTimer.current = setTimeout(() => dispatch({ type: "next" }), 1600);
+    resetTimer.current = setTimeout(
+      () => dispatch({ type: "next" }),
+      TIMINGS.ANSWER_FEEDBACK_MS,
+    );
   }
 
   return {
